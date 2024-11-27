@@ -52,9 +52,12 @@ async def food(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Command handler for /summary
 async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')  # Get today's date in 'YYYY-MM-DD' format
     conn = sqlite3.connect('food_records.db')
     c = conn.cursor()
-    c.execute("SELECT username, food FROM food_records")
+
+    # Modify the query to include the condition for today's date
+    c.execute("SELECT username, food FROM food_records WHERE date = ?", (today,))
     records = c.fetchall()
     conn.close()
 
@@ -62,7 +65,8 @@ async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
         summary_text = "\n".join([f"{username}: {food}" for username, food in records])
         await update.message.reply_text(summary_text)
     else:
-        await update.message.reply_text("No records found.")
+        await update.message.reply_text("No records found for today.")
+
 
 def main():
     # Use the API key from the environment variable

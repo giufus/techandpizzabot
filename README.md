@@ -1,2 +1,2 @@
 # techandpizzabot
-bot for t &amp; p
+telegram bot for tech and pizza orders
